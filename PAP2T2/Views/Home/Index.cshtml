@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PAP2T2.Models.UnidadeCurricular>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista das UCs</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>Login desde @Context.Session.GetString("Hora")</p>
+    <p>
+        <a asp-action="Inscrever">Fazer Inscrição</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ECTS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inscricoes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ECTS)
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated && item.Inscricoes.Count > 0)
+                {
+                     <a asp-action="listarInscritos" asp-route-id="@item.Codigo"
+                     data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#res"
+                     >@item.Inscricoes.Count</a>
+                }else{
+                    @Html.DisplayFor(modelItem => item.Inscricoes.Count)
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div id="res"></div>
